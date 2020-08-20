@@ -18,11 +18,15 @@ export default function () {
 				return schema.reminders.all();
 			});
 
-			let newId = 4;
 			this.post('/api/reminders', (schema, request) => {
 				const attrs = JSON.parse(request.requestBody);
 
 				return schema.reminders.create(attrs);
+			});
+
+			this.delete('/api/reminders/:id', (schema, request) => {
+				const id = request.params.id;
+				return schema.reminders.find(id).destroy();
 			});
 		},
 	});
