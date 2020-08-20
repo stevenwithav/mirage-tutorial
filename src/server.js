@@ -1,21 +1,22 @@
-import { createServer } from 'miragejs';
+import { createServer, Model } from 'miragejs';
 
 export default function () {
 	createServer({
+		models: {
+			reminder: Model,
+		},
+
 		routes() {
-			this.get('/api/reminders', () => ({
-				reminders: [
-					{ id: 1, text: 'Reminder 1' },
-					{ id: 2, text: 'Reminder 2' },
-					{ id: 3, text: 'Reminder 3' },
-				],
-			}));
+			this.get('/api/reminders', (schema) => {
+				// console.log(schema);
+				return schema.reminders.all();
+			});
 
 			let newId = 4;
-			this.post('api/reminders', (schema, request) => {
-				let attrs = JSON.parse(request.requestBody);
-				attrs.id = newId++;
-				return { reminder: attrs };
+			this.post('/api/reminders', (schema, request) => {
+				const attrs = JSON.parse(request.requestBody);
+
+				return schema.reminders.create(attrs);
 			});
 		},
 	});
