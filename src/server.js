@@ -10,6 +10,13 @@ export default function () {
 					{ id: 3, text: 'Reminder 3' },
 				],
 			}));
+
+			let newId = 4;
+			this.post('api/reminders', (schema, request) => {
+				let attrs = JSON.parse(request.requestBody);
+				attrs.id = newId++;
+				return { reminder: attrs };
+			});
 		},
 	});
 }
